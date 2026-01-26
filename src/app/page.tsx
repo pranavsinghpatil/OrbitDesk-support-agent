@@ -24,7 +24,7 @@ function SceneSelector() {
       <div className="absolute top-0 left-0 w-full p-6 z-10 pointer-events-none flex justify-between items-start">
         <div>
           <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
-            GraphStudio
+            Need 4 Attention
           </h1>
           <p className="text-zinc-400 mt-1 max-w-md">
             Interactive Deep Learning Exploration.
