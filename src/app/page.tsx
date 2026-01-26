@@ -1,65 +1,68 @@
-import Image from "next/image";
+"use client";
+
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, Stars, Environment } from "@react-three/drei";
+import { SingleNeuronViz } from "@/components/viz/SingleNeuron";
+import { MatMulViz } from "@/components/viz/MatMulViz";
+import { useState } from "react";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <main className="w-full h-screen bg-zinc-950 relative overflow-hidden">
+      <SceneSelector />
+    </main>
+  );
+}
+
+function SceneSelector() {
+  const [mode, setMode] = useState<"neuron" | "matmul">("neuron");
+  
+  return (
+    <>
+      <div className="absolute top-0 left-0 w-full p-6 z-10 pointer-events-none flex justify-between items-start">
+        <div>
+          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
+            GraphStudio
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-zinc-400 mt-1 max-w-md">
+            Interactive Deep Learning Exploration.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="text-right pointer-events-auto flex gap-2">
+           <button 
+             onClick={() => setMode("neuron")}
+             className={`px-4 py-2 rounded-lg backdrop-blur text-sm border transition-all ${
+               mode === "neuron" ? "bg-blue-500/20 border-blue-500 text-blue-200" : "bg-white/10 border-white/5 text-white hover:bg-white/20"
+             }`}
+           >
+            1. Single Neuron
+          </button>
+           <button 
+             onClick={() => setMode("matmul")}
+             className={`px-4 py-2 rounded-lg backdrop-blur text-sm border transition-all ${
+               mode === "matmul" ? "bg-purple-500/20 border-purple-500 text-purple-200" : "bg-white/10 border-white/5 text-white hover:bg-white/20"
+             }`}
+           >
+            2. Matrix Multiplication
+          </button>
         </div>
-      </main>
-    </div>
+      </div>
+
+      <Canvas camera={{ position: [0, 0, 10], fov: 45 }}>
+        <color attach="background" args={["#0a0a0a"]} />
+        <fog attach="fog" args={["#0a0a0a", 5, 20]} />
+        
+        <ambientLight intensity={0.5} />
+        <pointLight position={[10, 10, 10]} intensity={1} />
+        <Environment preset="city" />
+        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+
+        <group position={[0, 0, 0]}>
+           {mode === "neuron" ? <SingleNeuronViz /> : <MatMulViz />}
+        </group>
+
+        <OrbitControls makeDefault />
+      </Canvas>
+    </>
   );
 }
