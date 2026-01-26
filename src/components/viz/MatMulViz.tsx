@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Text, Instance, Instances } from "@react-three/drei";
+import { Text } from "@react-three/drei";
+
 import * as THREE from "three";
 
 interface MatrixProps {

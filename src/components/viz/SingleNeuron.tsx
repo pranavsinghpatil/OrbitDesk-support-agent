@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
+
 
 interface NeuronProps {
   position: [number, number, number];

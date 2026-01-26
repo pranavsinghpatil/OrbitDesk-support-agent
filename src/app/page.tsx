@@ -4,7 +4,9 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stars, Environment } from "@react-three/drei";
 import { SingleNeuronViz } from "@/components/viz/SingleNeuron";
 import { MatMulViz } from "@/components/viz/MatMulViz";
+import { TransformerTowerViz } from "@/components/viz/TransformerTower";
 import { useState } from "react";
+
 
 export default function Home() {
   return (
@@ -15,7 +17,7 @@ export default function Home() {
 }
 
 function SceneSelector() {
-  const [mode, setMode] = useState<"neuron" | "matmul">("neuron");
+  const [mode, setMode] = useState<"neuron" | "matmul" | "tower">("neuron");
   
   return (
     <>
@@ -45,10 +47,18 @@ function SceneSelector() {
            >
             2. Matrix Multiplication
           </button>
+           <button 
+             onClick={() => setMode("tower")}
+             className={`px-4 py-2 rounded-lg backdrop-blur text-sm border transition-all ${
+               mode === "tower" ? "bg-green-500/20 border-green-500 text-green-200" : "bg-white/10 border-white/5 text-white hover:bg-white/20"
+             }`}
+           >
+            3. The Tower
+          </button>
         </div>
       </div>
 
-      <Canvas camera={{ position: [0, 0, 10], fov: 45 }}>
+      <Canvas camera={{ position: [0, 5, 15], fov: 45 }}>
         <color attach="background" args={["#0a0a0a"]} />
         <fog attach="fog" args={["#0a0a0a", 5, 20]} />
         
@@ -58,11 +68,14 @@ function SceneSelector() {
         <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
 
         <group position={[0, 0, 0]}>
-           {mode === "neuron" ? <SingleNeuronViz /> : <MatMulViz />}
+           {mode === "neuron" && <SingleNeuronViz />}
+           {mode === "matmul" && <MatMulViz />}
+           {mode === "tower" && <TransformerTowerViz />}
         </group>
 
-        <OrbitControls makeDefault />
+        <OrbitControls makeDefault target={[0, 4, 0]} />
       </Canvas>
+
     </>
   );
 }
