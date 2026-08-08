@@ -1,0 +1,7 @@
+langgraph
+transformers==4.57.0
+sentence-transformers==5.1.1
+faiss-cpu
+torch==2.8.0
+pydantic
+accelerate==1.11.0
